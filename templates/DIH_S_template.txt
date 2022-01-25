@@ -1,0 +1,78 @@
+<% var index = index %>
+<% var service_id = ":" + properties.servicesProvided[index].id %>
+<% var orionHUB = properties.hubId %>
+{
+   <% var orionServiceID = process.env.ENTITIES_URI_PREFIX_SERVICE + orionHUB + service_id %>
+   "id": "<%= orionServiceID %>",
+   "type": "service",
+   "title":{
+      "type":"Property",
+      "value": "<%= properties.servicesProvided[index].name %>"
+   },
+   "description":{
+      "type":"Property",
+      "value": ""
+   },
+   "serviceimage":{
+      "type":"Property",
+      "value":{
+         "base64Data": "",
+         "filename": ""
+      }
+   },
+   "category":{
+      "type":"Property",
+      "value": "<%= properties.servicesProvided[index].name %>"
+   },
+   "servicetype":{
+      "type":"Property",
+      "value": "DIH Innovation Development"
+   },
+   "service":{
+      "type":"Property",
+      "value": "<%= properties.servicesProvided[index].name %>"
+   },
+   "target":{
+      "type":"Property",
+      "value":[
+
+      ]
+   },
+   "url":{
+      "type":"Property",
+      "value": ""
+   },
+   "additionalmaterial":{
+      "type":"Property",
+      "value":[
+         {
+            "label": "",
+            "url": ""
+         }
+      ]
+   },
+   "contacts":{
+      "type":"Property",
+      "value":[
+         {
+            "name": "",
+            "email": ""
+         }
+      ]
+   },
+   "author":{
+      "type":"Property",
+      "value": ""
+   },
+  
+   "relation":{
+      "type":"Property",
+      "value":{
+         "dih":[
+            {
+               "to":"<%= orionHUB %>"
+            }
+         ]
+      }
+   }
+}

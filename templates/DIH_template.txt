@@ -1,0 +1,55 @@
+{
+   
+   "id": "<%= id %>",
+   "type": "dih",
+   "title":{
+      "type":"Property",
+      "value": "<%= properties.name %>"
+   },
+   "website":{
+      "type":"Property",
+      "value": "<%= properties.website %>"
+   },
+   "logo":{
+      "type":"Property",
+      "value":{
+         "base64item": "",
+         "filename": ""
+      }
+   },
+   "description":{
+      "type":"Property",
+      "value": "<%= properties.description %>"
+   },
+   "address":{
+      "type":"Property",
+      "value":[
+         {
+            "street": "<%= properties.location %>",
+            "postalcode": "",
+            "city": "<%= properties.locationCity %>",
+            "country": "<%= properties.country.name %>",
+            "region": ""
+         }
+      ]
+   },
+   "representatives":{
+      "type":"Property",
+      "value":[
+         {
+            <% var completeName = properties.contactName.split(' ') %>            
+            "name": "<%= completeName[completeName.length-2] %>",
+            "surname": "<%= completeName[completeName.length-1] %>",
+            "email": "<%= properties.contactEmail %>",
+            "role": "<%= completeName[completeName.length-3] %>",
+            "responsibilities": ""
+         }
+      ]
+   },
+   "domain":{
+      "type": "Property",
+      "value": [
+         ""
+      ]
+   }   
+}
