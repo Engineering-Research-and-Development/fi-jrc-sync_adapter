@@ -22,10 +22,10 @@ let render = function (template, data) {
 module.exports.toMap = async function mappingProcess(fileTemplate, data) {
     try {
         let res = await render(fileTemplate, data);
-        let parsedJson = res.replace(/(\r\n|\n|\r|\t)/gm, "")                            
+        let parsedJson = res.replace(/(\r\n|\n|\r|\t|\b|\f|\\)/gm, "")
 
-        //console.log(JSON.parse(parsedJson))
-       // console.log(parsedJson)
+        parsedJson = parsedJson.replace(/[^\x00-\x7F]/g, "")
+
        return parsedJson
 
     } catch (err) {

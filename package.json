@@ -17,8 +17,11 @@
     "ejs": "^3.1.6",
     "express": "^4.17.2",
     "fs": "^0.0.1-security",
+    "json-fixer": "^1.6.13",
+    "jsonrepair": "^2.2.1",
     "lodash": "^4.17.21",
     "object-mapper": "^6.2.0",
-    "ocb-sender": "^2.4.4"
+    "ocb-sender": "^2.4.4",
+    "simple-json-repair": "^1.0.0"
   }
 }
