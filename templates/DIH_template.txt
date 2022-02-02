@@ -1,7 +1,7 @@
 {
    
    "id": "<%= id %>",
-   "type": "dih",
+   "type": "DigitalInnovationHub",
    "title":{
       "type":"Property",
       "value": "<%= properties.name %>"
@@ -13,8 +13,8 @@
    "logo":{
       "type":"Property",
       "value":{
-         "base64item": "",
-         "filename": ""
+         "base64Data": "",
+         "fileName": ""
       }
    },
    "description":{
@@ -23,15 +23,13 @@
    },
    "address":{
       "type":"Property",
-      "value":[
-         {
-            "street": "<%= properties.location %>",
-            "postalcode": "",
-            "city": "<%= properties.locationCity %>",
-            "country": "<%= properties.country.name %>",
-            "region": ""
+      "value":{
+            "streetAddress": "<%= properties.location %>",
+            "addressRegion": "",
+            "postalCode": "",
+            "addressCountry": "<%= properties.country.name %>",
+            "addressLocality": "<%= properties.locationCity %>"          
          }
-      ]
    },
    "representatives":{
       "type":"Property",
@@ -51,5 +49,33 @@
       "value": [
          ""
       ]
-   }   
+   },
+   "competences": {
+		"type": "Property",
+		"value": [
+			""
+		]
+	},
+   "socialAccounts": {
+		"type": "Property",
+		"value": {
+			"linkedin": "",
+			"facebook": "",
+			"twitter": "",
+			"instagram": ""
+		}
+	},
+   	"relation": {
+		"type": "Property",
+		"value": [
+			{
+				"relationType": "dih",
+				"relationIdentifier": ""
+			},
+			{
+				"relationType": "service",
+				"relationIdentifier": ""
+			}
+		]
+	}
 }

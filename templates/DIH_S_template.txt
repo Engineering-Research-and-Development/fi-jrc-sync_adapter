@@ -4,7 +4,7 @@
 {
    <% var orionServiceID = process.env.ENTITIES_URI_PREFIX_SERVICE + orionHUB + service_id %>
    "id": "<%= orionServiceID %>",
-   "type": "service",
+   "type": "DigitalInnovationHubService",
    "title":{
       "type":"Property",
       "value": "<%= properties.servicesProvided[index].name %>"
@@ -13,11 +13,11 @@
       "type":"Property",
       "value": ""
    },
-   "serviceimage":{
+   "serviceImage":{
       "type":"Property",
       "value":{
          "base64Data": "",
-         "filename": ""
+         "fileName": ""
       }
    },
    "category":{
@@ -28,7 +28,7 @@
       "type":"Property",
       "value": "DIH Innovation Development"
    },
-   "service":{
+   "serviceSubType":{
       "type":"Property",
       "value": "<%= properties.servicesProvided[index].name %>"
    },
@@ -42,7 +42,7 @@
       "type":"Property",
       "value": ""
    },
-   "additionalmaterial":{
+   "additionalMaterial":{
       "type":"Property",
       "value":[
          {
@@ -67,12 +67,15 @@
   
    "relation":{
       "type":"Property",
-      "value":{
-         "dih":[
+      "value": [
             {
+               "relationType": "dih",
                "to":"<%= orionHUB %>"
+            },
+            {
+               "relationType": "service",
+				   "relationIdentifier": ""
             }
-         ]
-      }
+         ]      
    }
 }
