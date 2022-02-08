@@ -44,11 +44,10 @@
          }
       ]
    },
+   <% var sect = "[]"; if(sectors) {sect = JSON.stringify(sectors)} %>
    "domain":{
       "type": "Property",
-      "value": [
-         ""
-      ]
+      "value": <%- sect %>
    },
    "competences": {
 		"type": "Property",
@@ -77,5 +76,9 @@
 				"relationIdentifier": ""
 			}
 		]
-	}
+	},
+   "@context": [
+         "https://schema.lab.fiware.org/ld/context",
+         "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld"
+       ]
 }

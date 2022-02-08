@@ -1,29 +1,21 @@
-// this module to catch TRL - Not used yet
-
 const axios = require('axios')
 const cheerio = require('cheerio')
 
 let log = require('../utilities/logger')
 
-// const
-
-    // Remove to pass as function param
-    //siteURL = 'https://s3platform-legacy.jrc.ec.europa.eu/digital-innovation-hubs-tool/-/dih/3480/view'
-    // siteURL = 'https://s3platform-legacy.jrc.ec.europa.eu/digital-innovation-hubs-tool/-/dih/1326/view'
-
 module.exports = {
-//async function getServices(siteURL) {
+
 getAddingServices: async function (siteURL) {
-
-    log.info("Information retrieval in progress...")
-
+    console.info("URL: " + siteURL)
+    log.debug("Scraping retrieval in progress...")
+    
     try {
         const hub = await axios({
             method: "GET",
-            url: siteURL
+            url: siteURL,
         })
 
-        log.info("Information analysis in progress...")
+        log.debug("Information analysis in progress...")
 
         const $ = cheerio.load(hub.data)
         const elemSelector = ".hubCardContent"
@@ -50,13 +42,18 @@ getAddingServices: async function (siteURL) {
             }
         })
 
-        return TRLList
-       // console.log(TRLList)
-      //  console.log(sectorList)
+
+       log.debug('scraping done')
+    
+       return sectorList
 
     } catch (err) {
-        log.error('Failed scraping operation due to: ' + err)
+        log.warning('Failed scraping operation due to: ' + err)
+        log.warning('Code error: ' + err.code)
+        log.warning('Try again...')
+        await this.getAddingServices(siteURL)
+        return
     }
 }
 }
-//getServices(siteURL)
+

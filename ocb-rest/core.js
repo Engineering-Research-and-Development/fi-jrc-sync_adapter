@@ -1,17 +1,15 @@
 let log = require('../utilities/logger')
 let axios = require('axios');
-const fs = require('fs');
 
 require('dotenv').config({ path: __dirname + './../.env' })
 
 module.exports = {
 
   // create a new entity
-  createOrionEntity: async function (transactionUUID, ngsiLDPayload) {
+  createOrionEntity: async function (ngsiLDPayload) {
     let options = {
       headers: {
         "Content-Type": "application/ld+json",
-        "Fiware-Correlator": transactionUUID
       },
       validateStatus: s => true
     };
@@ -58,12 +56,11 @@ module.exports = {
   },
 
   //update an entity
-  updateOrionEntity: async function (transactionUUID, ngsiLDPayload) {
+  updateOrionEntity: async function (ngsiLDPayload) {
 
     let options = {
       headers: {
         "Content-Type": "application/ld+json",
-        "Fiware-Correlator": transactionUUID
       }
     };
 
@@ -90,45 +87,30 @@ module.exports = {
     log.info("updated entity: " + entityID)
   },
 
-  createOrModifyUpsert: async function (transactionUUID, ngsiLDPayloadArray) {
-    log.info("Create or update entities in multi-id way...")
-
-
-    let orionEntitiesArray = [];
+  createOrModifyUpsert: async function (ngsiLDPayloadArray) {
+    log.info("Create or update entities in multi-id mode...")
+   
     let options = {
       headers: {
         "Content-Type": "application/ld+json",
-        "Fiware-Correlator": transactionUUID
       },
       validateStatus: s => true
     };
-
-    ngsiLDPayloadArray.forEach(element => {
-
-      entityToOrion = JSON.parse(element)
-
-      entityToOrion["@context"] = [
-        "https://schema.lab.fiware.org/ld/context",
-        "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld"
-      ]
-
-      orionEntitiesArray.push(entityToOrion)
-    });
-
+  
     try {
 
-      let start, end = orionEntitiesArray.length, chunk, step = parseInt(process.env.CHUNK_SIZE);
+      let start, end = ngsiLDPayloadArray.length, chunk, step = parseInt(process.env.CHUNK_SIZE);
 
 
       for (start = 0; start < end; start += step) {
-        chunk = orionEntitiesArray.slice(start, start + step)
+        chunk = ngsiLDPayloadArray.slice(start, start + step)
 
         let resp = await axios.post(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entityOperations/upsert', chunk, options)
         if (resp.status != 200 && resp.status != 201 && resp.status != 207 && resp.status != 204) {
           // one - to - one to reduce loss
           reduceLoss(chunk)
         } else {
-          log.debug("CHUNK " + start + " of " + end + "] elements processed")
+          log.debug("CHUNK [" + start + " of " + end + "] elements processed")
         }
       }
 
