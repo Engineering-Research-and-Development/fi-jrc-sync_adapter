@@ -2,11 +2,6 @@ let log = require('../utilities/logger')
 let mp = require('../utilities/mapperPromification')
 let addingFields = require('../scraping_module/scraping')
 let rest = require('../ocb-rest/core')
-
-const fs = require('fs');
-
-
-
 let axios = require('axios')
 require('dotenv').config({ path: __dirname + './../.env' })
 
