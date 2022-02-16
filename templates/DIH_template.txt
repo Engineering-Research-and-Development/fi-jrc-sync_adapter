@@ -64,7 +64,7 @@
 			"instagram": ""
 		}
 	},
-   	"relation": {
+   "relation": {
 		"type": "Property",
 		"value": [
 			{
@@ -77,8 +77,12 @@
 			}
 		]
 	},
+   "lastUpdate": {
+      "type": "Property",
+      "value": "<%= lastUpdate %>"
+   },
    "@context": [
          "https://schema.lab.fiware.org/ld/context",
-         "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld"
+         "https://smart-data-models.github.io/dataModel.DigitalInnovationHub/context.jsonld"
        ]
 }
