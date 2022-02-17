@@ -12,10 +12,23 @@ module.exports = {
         console.info("URL: " + siteURL)
         log.debug("Scraping retrieval in progress...")
 
+        let hub
+        let count = parseInt(process.env.ATTEMPTS_NUMBER)
+
         try {
+            hub = await axios.get(siteURL)
 
-            const hub = await axios.get(siteURL)
+        } catch (axiosErr) {
+            count = count - 1;
+            if (axiosErr.code == 'ECONNRESET' && count) {
+                log.warning("Data "+ siteURL +" not catched: new attempt in progress")
+                hub = await axios.get(siteURL)
+            } else {
+                throw axiosErr;
+            }
+        }
 
+        try {
             log.debug("Information analysis in progress...")
 
             const $ = cheerio.load(hub.data)

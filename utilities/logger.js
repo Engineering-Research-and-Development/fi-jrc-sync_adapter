@@ -1,6 +1,9 @@
 const logLevels = ['FATAL', 'ERROR', 'INFO', 'WARN', 'DEBUG']
 require('dotenv').config({ path: __dirname + './../.env' })
 
+const fs = require('fs')
+const  logNameFile = require('../index')
+
 const colors = {
     magenta: "\x1b[35m",
     red: "\x1b[31m",
@@ -18,6 +21,7 @@ function printLog(level, messageToPrint, color) {
 
     if (logLevelsToShow.includes(level)) {
         console.log(color, "[" + level + "][" + (new Date()).toISOString() + "]" + messageToPrint, colors.reset)
+        fs.appendFileSync(logNameFile.logNameFile, "[" + level + "][" + (new Date()).toISOString() + "]"+ messageToPrint);
     }
 }
 

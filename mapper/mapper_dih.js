@@ -36,6 +36,7 @@ module.exports = {
 
         let infoFromScraping = await addingFields.getAddingServices(item.properties.hubProfileURL)
 
+        console.log("le info sono prese sono: ", infoFromScraping)
         item.sectors = infoFromScraping.sectorList
         item.lastUpdate = infoFromScraping.lastUpdate
 
