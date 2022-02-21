@@ -81,6 +81,13 @@
       "type": "Property",
       "value": "<%= lastUpdate %>"
    },
+   "geometry": {
+      "type": "GeoProperty",
+      "value": {
+         "type": "<%= geometry.type %>",
+         "coordinates": [<%= geometry.coordinates %>]
+      }
+   },
    "@context": [
          "https://schema.lab.fiware.org/ld/context",
          "https://smart-data-models.github.io/dataModel.DigitalInnovationHub/context.jsonld"
