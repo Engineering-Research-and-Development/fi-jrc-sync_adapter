@@ -1,6 +1,6 @@
 let log = require('../utilities/logger')
 let mp = require('../utilities/mapperPromification')
-let addingFields = require('../scraping_module/scraping')
+let addingFields = require('./scraping_module/scraping')
 let rest = require('../ocb-rest/core')
 let axios = require('axios')
 require('dotenv').config({ path: __dirname + './../.env' })
@@ -15,13 +15,12 @@ function sleep(delay) {
 
 module.exports = {
 
-  getData: async function () {
+  getData: async function (response) {
     let dihArray = [];
     let wrongData = [];
     let DIH;
 
     try {
-      let response = await axios.get(process.env.URL);
 
       for (let item of response.data.features) {
 
@@ -33,6 +32,7 @@ module.exports = {
         item.id = process.env.ENTITIES_URI_PREFIX + item.properties.hubId
         log.info("processing DigitalInnovationHub: " + item.id)
 
+        await sleep(100)
 
         let infoFromScraping = await addingFields.getAddingServices(item.properties.hubProfileURL)
 
@@ -40,9 +40,6 @@ module.exports = {
         item.sectors = infoFromScraping.sectorList
         item.lastUpdate = infoFromScraping.lastUpdate
 
-
-
-        //  await sleep(100)
         try {
           // map in template
           DIH = await mp.toMap(process.env.DIH_TEMPLATE, item)
@@ -55,7 +52,7 @@ module.exports = {
         }
         // Build Array
         dihArray.push(DIH)
-      }
+      } //for
 
       if (wrongData.length != 0) {
         console.log("There are " + wrongData.length + " not mapped DIH")
@@ -67,14 +64,8 @@ module.exports = {
       }
       console.log("There are " + wrongData.length + " not mapped DIH")
 
-      console.debug("\n\nReady to send to Orion...\n\n")
-
-      try {
-        await rest.createOrModifyUpsert(dihArray)
-      } catch (e) {
-        log.error("Unable update due to: " + e.message)
-      }
-
+      return dihArray
+ 
 
     } catch (e) {
 

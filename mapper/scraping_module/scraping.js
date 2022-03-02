@@ -1,7 +1,7 @@
 const axios = require('axios')
 const cheerio = require('cheerio')
-let log = require('../utilities/logger')
-let utils = require('../utilities/utils')
+let log = require('../../utilities/logger')
+let utils = require('../../utilities/utils')
 
 
 module.exports = {

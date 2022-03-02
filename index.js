@@ -4,9 +4,13 @@ var CronJob = require('cron').CronJob;
 var log = require('./utilities/logger')
 var adapterJob = require('./mapper/mapper_dih')
 var fs = require('fs')
+var axios = require('axios')
+let rest = require('./ocb-rest/core');
+const utils = require('./utilities/utils');
+const checkers = require('./utilities/checks/duplicateChecker')
 
 
-//let temporizedJob = new CronJob(process.env.INTERVAL, () => {
+let temporizedJob = new CronJob(process.env.INTERVAL, async function () {
 
     var today = new Date();
     var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
@@ -21,10 +25,45 @@ var fs = require('fs')
 
     exports.logNameFile = logNameFile
 
-    log.info("Job started on " + date + "at " + time)
+    log.info("Job started on " + date + " at " + time)
 
-    adapterJob.getData()
+    let dihArray = []
+    let updateOrCreateArray = []
 
-//}, null, true, process.env.LOCAL_TIME);
+    try {
+        let response = await axios.get(process.env.URL);
 
-//temporizedJob.start();
+        dihArray = await adapterJob.getData(response)
+
+    } catch (e) {
+        log.error("Unable retrieve data from JRC-Platform due to: " + e.message)
+    }
+
+    log.debug("\n\nReady to send to Orion...\n\n")
+
+
+
+    let orionEntities = await rest.getAllEntities(dihArray.length);
+
+    updateOrCreateArray = await checkers.duplicateChecker(orionEntities, dihArray)
+
+    if (updateOrCreateArray.length != 0) {
+        try {
+            log.info("Orion is updating")
+
+           // await rest.createOrModifyUpsert(dihArray)
+            await rest.createOrModifyUpsert(updateOrCreateArray)
+
+            log.info("Orion is updated")
+        } catch (e) {
+            log.error("Unable update due to: " + e.message)
+        }
+    }
+
+
+    }, null, true, process.env.LOCAL_TIME);
+
+    temporizedJob.start();
+
+
+temporizedJob();

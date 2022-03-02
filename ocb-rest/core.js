@@ -120,9 +120,34 @@ module.exports = {
     }
 
     log.info("orion is updated about JRC data")
+  },
+
+  getAllEntities: async function(elements) {
+    
+    let options = {
+      headers: {
+        "Content-Type": "application/ld+json",
+      },
+    };
+
+    try {
+
+      let resp = await axios.get(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entities?type='+process.env.ENTITIES_TYPE+"&limit="+elements, options)
+      
+      if (resp.status != 200) {
+        console.error(resp.data)
+        throw new Error(resp.status)
+     }
+      return resp.data
+
+    } catch (e) {
+      log.error("Unable get all entities due to: " + e.message)
+      throw e
+    }
   }
 }
 
+// To reduce loss
 async function reduceLoss(chunk) {
   for(let i; i<chunk.length; i++) {
 
