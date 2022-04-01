@@ -10,10 +10,10 @@ module.exports = {
 
         let isNewEntityForOrion;
 
-        let commonEntities = []
+        let exclusiveFormOrion = []
 
         let exclusiveFromAdapter = []
-        let exclusiveFormOrion = []
+       // let exclusiveFormOrion = []
         let winners = []
 
 
@@ -42,6 +42,8 @@ module.exports = {
                                 log.debug("Entity " + orionEntity.id + " is updating...")
 
                                 //the winner is adapterEntity
+                                log.debug("Entities to merge: " + adapterEntity.id + " and " + orionEntity.id)
+
                                 winners.push({
                                     adapterEntityID: adapterEntity.id,
                                     orionEntityID: orionEntity.id,
@@ -49,9 +51,11 @@ module.exports = {
                                     loser: orionEntity
                                 })
 
-                                commonEntities.push(orionEntity.id)
+                                exclusiveFormOrion.push(orionEntity.id)
                             } else {
                                 // the winner is orionEntity
+                                log.debug("Entities to merge: " + adapterEntity.id + " and " + orionEntity.id)
+
                                 winners.push({
                                     adapterEntityID: adapterEntity.id,
                                     orionEntityID: orionEntity.id,
@@ -59,7 +63,7 @@ module.exports = {
                                     loser: adapterEntity
                                 })
 
-                                commonEntities.push(orionEntity.id)
+                                exclusiveFormOrion.push(orionEntity.id)
                             }
 
                         } catch (e) {
@@ -70,26 +74,27 @@ module.exports = {
                 }
             }
             if (isNewEntityForOrion) {
-                log.debug("New " + adapterEntity.id + " found")
+                log.debug("New entity " + adapterEntity.id + " to send to Orion")
                 exclusiveFromAdapter.push(adapterEntity)
             }
         }
 
         // catch orionNewEntity
-        commonEntities = [...new Set(commonEntities)];
+        exclusiveFormOrion = [...new Set(exclusiveFormOrion)];
 
-        for (let commonEntity of commonEntities) {
-           orionEntities.filter(orionEntity => {
+        log.debug("New entities From Orion to send to Dymer: " + exclusiveFormOrion)
+        for (let commonEntity of exclusiveFormOrion) {
+            orionEntities.filter(orionEntity => {
                 orionEntity.id == commonEntity
             })
-            
+
         }
 
         log.info("*** finished check ***")
 
         return {
             exclusiveFromAdapter,
-            exclusiveFormOrion: orionEntities,
+            exclusiveFormOrion,
             winners
         }
     }
