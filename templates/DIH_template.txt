@@ -81,8 +81,8 @@
       "type": "Property",
       "value": "<%= lastUpdate %>"
    },
-   "geometry": {
-      "type": "GeoProperty",
+   "location": {
+      "type": "Property",
       "value": {
          "type": "<%= geometry.type %>",
          "coordinates": [<%= geometry.coordinates %>]

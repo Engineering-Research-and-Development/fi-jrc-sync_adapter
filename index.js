@@ -8,10 +8,11 @@ var axios = require('axios')
 let rest = require('./ocb-rest/core');
 const utils = require('./utilities/utils');
 const checkers = require('./utilities/checks/duplicateChecker')
+var bson = require('./utilities/bsonSerialization')
 
 
-let temporizedJob = new CronJob(process.env.INTERVAL, async function () {
-
+//let temporizedJob = new CronJob(process.env.INTERVAL, async function () {
+async function temporizedJob() {
     var today = new Date();
     var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -46,10 +47,11 @@ let temporizedJob = new CronJob(process.env.INTERVAL, async function () {
     let orionEntities = await rest.getAllEntities(dihArray.length);
 
     updateOrCreateArray = await checkers.duplicateChecker(orionEntities, dihArray)
-
+  
+    
     if (updateOrCreateArray.length != 0) {
         try {
-            log.info("Orion is updating")
+            log.info("Orion is updating...")
 
            // await rest.createOrModifyUpsert(dihArray)
             await rest.createOrModifyUpsert(updateOrCreateArray)
@@ -60,10 +62,11 @@ let temporizedJob = new CronJob(process.env.INTERVAL, async function () {
         }
     }
 
+    log.info("Job Ended on " + date + " at " + time)
+} // fake function
+    // }, null, true, process.env.LOCAL_TIME);
 
-    }, null, true, process.env.LOCAL_TIME);
-
-    temporizedJob.start();
+    // temporizedJob.start();
 
 
 temporizedJob();

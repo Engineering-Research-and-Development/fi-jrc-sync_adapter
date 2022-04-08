@@ -18,15 +18,15 @@ module.exports = {
 
 
         for (let JRCEntity of JRCEntities) {
-            let JRCHubCoordinates = [JRCEntity.geometry.value.coordinates[0].toFixed(6), JRCEntity.geometry.value.coordinates[1].toFixed(6)]
+            let JRCHubCoordinates = [JRCEntity.location.value.coordinates[0].toFixed(6), JRCEntity.location.value.coordinates[1].toFixed(6)]
 
             isNewEntity = true;
 
             for (let orionEntity of orionEntities) {
 
-                let orionHubCoordinater = [orionEntity.geometry.value.coordinates[0], orionEntity.geometry.value.coordinates[1]]
+                let orionHubCoordinates = [orionEntity.location.value.coordinates[0], orionEntity.location.value.coordinates[1]]
 
-                if (await checker.checkDistance(JRCHubCoordinates, orionHubCoordinater)) {
+                if (await checker.checkDistance(JRCHubCoordinates, orionHubCoordinates)) {
                     // nearby Hub
                     //Must check other fields
 
