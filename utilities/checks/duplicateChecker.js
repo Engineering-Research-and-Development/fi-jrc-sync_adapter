@@ -35,7 +35,7 @@ module.exports = {
                         isNewEntity = false;
                         try {
 
-                            if (Date.parse(JRCEntity.lastUpdate.value) > Date.parse(orionEntity.lastUpdate.value)) {
+                            if (Date.parse(JRCEntity.dateUpdated.value) > Date.parse(orionEntity.dateUpdated.value)) {
                                 // new is more recent. Catch to upadate
                                 log.debug("Entity " + orionEntity.id + " is updating...")
                                 entitiesToUpdate.push(JRCEntity)

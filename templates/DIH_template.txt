@@ -77,7 +77,7 @@
 			}
 		]
 	},
-   "lastUpdate": {
+   "dateUpdated": {
       "type": "Property",
       "value": "<%= lastUpdate %>"
    },
