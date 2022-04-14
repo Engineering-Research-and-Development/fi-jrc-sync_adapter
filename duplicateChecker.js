@@ -34,7 +34,7 @@ module.exports = {
 
                         try {
 
-                            if (Date.parse(adapterEntity.lastUpdate.value) > Date.parse(orionEntity.lastUpdate.value)) {
+                            if (Date.parse(adapterEntity.dateUpdated.value) > Date.parse(orionEntity.dateUpdated.value)) {
                                 log.debug("Entity " + orionEntity.id + " is updating...")
 
                                 //the winner is adapterEntity

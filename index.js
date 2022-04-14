@@ -9,7 +9,7 @@ require('dotenv').config()
 async function IndexFunction () {
     let resp = await check.dupicateChecker(orionEntities, AdapterEntities)
 
-    console.log(JSON.stringify(resp))
+   // console.log(JSON.stringify(resp))
 }
 
 

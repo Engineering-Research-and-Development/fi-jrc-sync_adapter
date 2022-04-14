@@ -27,7 +27,7 @@ module.exports = {
                             //It's the same service
                             try {
 
-                                if (Date.parse(adapterService.lastUpdate.value) > Date.parse(orionService.lastUpdate.value)) {
+                                if (Date.parse(adapterService.dateUpdated.value) > Date.parse(orionService.dateUpdated.value)) {
                                     log.debug("Service " + orionService.id + " is updating...")
 
                                     //the winner is adapterEntity
