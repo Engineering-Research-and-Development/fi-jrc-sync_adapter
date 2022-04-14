@@ -2,18 +2,14 @@ let checker = require('./geoChecker')
 let log = require('./logs/logger')
 let _ = require('lodash')
 
-
 module.exports = {
     dupicateChecker: async function (orionEntities, AdapterEntities) {
 
-        log.info("*** CHECKING FOR DUPLICATES ***")
+        log.info("*** CHECKING FOR DUPLICATES ENTITIES ***")
 
         let isNewEntityForOrion;
-
-        let exclusiveFormOrion = []
-
-        let exclusiveFromAdapter = []
-       // let exclusiveFormOrion = []
+        let exclusiveFromOrion = []
+        let exclusiveFromAdapter = []       
         let winners = []
 
 
@@ -51,7 +47,6 @@ module.exports = {
                                     loser: orionEntity
                                 })
 
-                                exclusiveFormOrion.push(orionEntity.id)
                             } else {
                                 // the winner is orionEntity
                                 log.debug("Entities to merge: " + adapterEntity.id + " and " + orionEntity.id)
@@ -62,8 +57,6 @@ module.exports = {
                                     winner: orionEntity,
                                     loser: adapterEntity
                                 })
-
-                                exclusiveFormOrion.push(orionEntity.id)
                             }
 
                         } catch (e) {
@@ -79,22 +72,26 @@ module.exports = {
             }
         }
 
-        // catch orionNewEntity
-        exclusiveFormOrion = [...new Set(exclusiveFormOrion)];
-
-        log.debug("New entities From Orion to send to Dymer: " + exclusiveFormOrion)
-        for (let commonEntity of exclusiveFormOrion) {
-            orionEntities.filter(orionEntity => {
-                orionEntity.id == commonEntity
-            })
-
+        //ExclusiveOrionEntities
+        for (let orionEntity of orionEntities) {
+            let found = false
+            for (let winnerEntity of winners) {
+                if(winnerEntity.orionEntityID == orionEntity.id) {
+                    found = true
+                }                
+            }
+            if(!found) {
+                log.debug("New entity " + orionEntity.id + " to send to Dymer")
+                exclusiveFromOrion.push(orionEntity)
+            }
         }
 
-        log.info("*** finished check ***")
+
+        log.info("*** CHECK FINISHED ***")
 
         return {
             exclusiveFromAdapter,
-            exclusiveFormOrion,
+            exclusiveFromOrion,
             winners
         }
     }
