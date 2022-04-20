@@ -7,6 +7,9 @@ The new entities are pushed into an array that is sent in chunks to Orion-LD
 
 There is a built-in scheduler, so the adapter runs at chosen time intervals.
 
+## Notes
+JRC WebAdapter has an integrated DuplicateChecker because it doen't communicate with any Dymer
+
 ## Run
 To install: `npm install`
 
@@ -23,8 +26,7 @@ INTERVAL=* * * * *
 LOCAL_TIME=Europe/Rome
 
 *# Templates*
-DIH_TEMPLATE=../templates/DIH_template.txt
-DIH_S_TEMPLATE=../templates/DIH_S_template.txt
+DIH_TEMPLATE=templates/DIH_template.txt
 
 *# Orion settings*
 PROTOCOL=http
@@ -35,3 +37,9 @@ ENTITIES_URI_PREFIX_SERVICE=urn:ngsi-ld-s3jrc-service:
 NUMBER_OF_CONNECTION_RETRIES= 10
 
 CHUNK_SIZE=50
+
+
+*# DuplicateChecker settings*
+RADIUS=0.005
+UNIT=kilometres
+STEPS=30

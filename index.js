@@ -11,8 +11,8 @@ const checkers = require('./utilities/checks/duplicateChecker')
 var bson = require('./utilities/bsonSerialization')
 
 
-//let temporizedJob = new CronJob(process.env.INTERVAL, async function () {
-async function temporizedJob() {
+let temporizedJob = new CronJob(process.env.INTERVAL, async function () {
+//async function temporizedJob() {
     var today = new Date();
     var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -63,10 +63,10 @@ async function temporizedJob() {
     }
 
     log.info("Job Ended on " + date + " at " + time)
-} // fake function
-    // }, null, true, process.env.LOCAL_TIME);
+//} // fake function
+    }, null, true, process.env.LOCAL_TIME);
 
-    // temporizedJob.start();
+    temporizedJob.start();
 
 
-temporizedJob();
+//temporizedJob();
