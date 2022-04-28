@@ -8,7 +8,7 @@ The new entities are pushed into an array that is sent in chunks to Orion-LD
 There is a built-in scheduler, so the adapter runs at chosen time intervals.
 
 ## Notes
-JRC WebAdapter has an integrated DuplicateChecker because it doen't communicate with any Dymer
+JRC WebAdapter has an integrated DuplicateChecker because it doesn't communicate with any Dymer
 
 ## Run
 To install: `npm install`
