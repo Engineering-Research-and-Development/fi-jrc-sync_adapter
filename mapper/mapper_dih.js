@@ -22,7 +22,6 @@ module.exports = {
     let DIH;
 
     try {
-
       for (let item of response.data.features) {
 
         // clear description

@@ -2,6 +2,10 @@ let log = require('../utilities/logger')
 let axios = require('axios');
 var bson = require('../utilities/bsonSerialization')
 
+var { RESTCallsManager } = require('../restCallManager/core')
+
+const oauthAxios = RESTCallsManager.getOAuthAxiosClient();
+
 require('dotenv').config({ path: __dirname + './../.env' })
 
 module.exports = {
@@ -23,7 +27,8 @@ module.exports = {
 
     try {
 
-      let resp = await axios.post(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entities', entityToOrion, options)
+      //let resp = await axios.post(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entities', entityToOrion, options)
+      let resp = await oauthAxios.post(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entities', entityToOrion, options)
       if (resp.status != 200 && resp.status != 201) {
         console.error(resp.data)
         throw new Error(resp.status)
@@ -41,7 +46,8 @@ module.exports = {
     log.debug("Checking existence of entity id: " + entityID + " on OCB");
 
     try {
-      let response = await axios.get(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entities?id=' + entityID)
+      //let response = await axios.get(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entities?id=' + entityID)
+      let response = await oauthAxios.get(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entities?id=' + entityID)
 
       if (response.data.length != 0) {
         return true
@@ -75,7 +81,8 @@ module.exports = {
     ]
 
     try {
-      let resp = await axios.patch(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entities/' + entityID + "/attrs", entityToOrion, options)
+      //let resp = await axios.patch(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entities/' + entityID + "/attrs", entityToOrion, options)
+      let resp = await oauthAxios.patch(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entities/' + entityID + "/attrs", entityToOrion, options)
       if (resp.status != 200 && resp.status != 201) {
         console.error(resp.data)
         throw new Error(resp.status)
@@ -113,7 +120,8 @@ module.exports = {
         // console.debug("BSON serialization completed")
         /**/
 
-        let resp = await axios.post(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entityOperations/upsert', chunk/*bsonChunk*/, options)
+        //let resp = await axios.post(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entityOperations/upsert', chunk/*bsonChunk*/, options)
+        let resp = await oauthAxios.post(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entityOperations/upsert', chunk/*bsonChunk*/, options)
         if (resp.status != 200 && resp.status != 201 && resp.status != 207 && resp.status != 204) {
           // one - to - one to reduce loss
           reduceLoss(chunk)
@@ -140,7 +148,8 @@ module.exports = {
 
     try {
 
-      let resp = await axios.get(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entities?type=' + process.env.ENTITIES_TYPE + "&limit=" + elements, options)
+      //let resp = await axios.get(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entities?type=' + process.env.ENTITIES_TYPE + "&limit=" + elements, options)
+      let resp = await oauthAxios.get(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entities?type=' + process.env.ENTITIES_TYPE + "&limit=" + elements, options)
 
       if (resp.status != 200) {
         console.error(resp.data)
@@ -163,9 +172,11 @@ async function reduceLoss(chunk) {
     log.debug("Detection for " + chunk[i].id + ": " + doesExist)
 
     if (doesExist == true) {
-      await axios.post(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entities', chunk[i], options)
+      //await axios.post(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entities', chunk[i], options)
+      await oauthAxios.post(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entities', chunk[i], options)
     } else {
-      resp = await axios.patch(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entities/' + entityID + "/attrs", chunk[i], options)
+     // resp = await axios.patch(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entities/' + entityID + "/attrs", chunk[i], options)
+      resp = await oauthAxios.patch(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entities/' + entityID + "/attrs", chunk[i], options)
     }
   }
   return

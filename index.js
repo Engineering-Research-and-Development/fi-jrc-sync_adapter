@@ -1,30 +1,33 @@
-require('dotenv').config()
+require('dotenv').config({ path: __dirname + './.env' })
 
 var CronJob = require('cron').CronJob;
 var log = require('./utilities/logger')
 var adapterJob = require('./mapper/mapper_dih')
-var fs = require('fs')
+//var fs = require('fs')
 var axios = require('axios')
 let rest = require('./ocb-rest/core');
 const utils = require('./utilities/utils');
 const checkers = require('./utilities/checks/duplicateChecker')
 var bson = require('./utilities/bsonSerialization')
+const { AuthTokensManager } = require('./authTokensManager/core');
 
 
-let temporizedJob = new CronJob(process.env.INTERVAL, async function () {
-//async function temporizedJob() {
+//let temporizedJob = new CronJob(process.env.INTERVAL, async function () {
+async function temporizedJob() {
     var today = new Date();
     var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
 
-    let folder = './logs';
+ //  let folder = './logs';
 
-    if (!fs.existsSync(folder)) {
-        fs.mkdirSync(folder);
-    }
-    let logNameFile = folder + "/" + date + ".log"
+    await AuthTokensManager.init();
 
-    exports.logNameFile = logNameFile
+    // if (!fs.existsSync(folder)) {
+    //     fs.mkdirSync(folder);
+    // }
+    // let logNameFile = folder + "/" + date + ".log"
+
+    // exports.logNameFile = logNameFile
 
     log.info("Job started on " + date + " at " + time)
 
@@ -47,13 +50,13 @@ let temporizedJob = new CronJob(process.env.INTERVAL, async function () {
     let orionEntities = await rest.getAllEntities(dihArray.length);
 
     updateOrCreateArray = await checkers.duplicateChecker(orionEntities, dihArray)
-  
-    
+
+
     if (updateOrCreateArray.length != 0) {
         try {
             log.info("Orion is updating...")
 
-           // await rest.createOrModifyUpsert(dihArray)
+            // await rest.createOrModifyUpsert(dihArray)
             await rest.createOrModifyUpsert(updateOrCreateArray)
 
             log.info("Orion is updated")
@@ -63,10 +66,10 @@ let temporizedJob = new CronJob(process.env.INTERVAL, async function () {
     }
 
     log.info("Job Ended on " + date + " at " + time)
-//} // fake function
-    }, null, true, process.env.LOCAL_TIME);
+} // fake function
+//    }, null, true, process.env.LOCAL_TIME);
 
-    temporizedJob.start();
+//    temporizedJob.start();
 
 
-//temporizedJob();
+temporizedJob();

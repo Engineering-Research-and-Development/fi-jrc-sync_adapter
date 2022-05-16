@@ -1,7 +1,7 @@
 let checker = require('./checkers')
 let log = require('../logger')
 let utils = require('../utils')
-const { logNameFile } = require('../..')
+//const { logNameFile } = require('../..')
 
 
 module.exports = {
@@ -22,27 +22,29 @@ module.exports = {
 
             isNewEntity = true;
 
-            for (let orionEntity of orionEntities) {
+            if (orionEntities.length != 0) {
+                for (let orionEntity of orionEntities) {
 
-                let orionHubCoordinates = [orionEntity.location.value.coordinates[0], orionEntity.location.value.coordinates[1]]
+                    let orionHubCoordinates = [orionEntity.location.value.coordinates[0], orionEntity.location.value.coordinates[1]]
 
-                if (await checker.checkDistance(JRCHubCoordinates, orionHubCoordinates)) {
-                    // nearby Hub
-                    //Must check other fields
+                    if (await checker.checkDistance(JRCHubCoordinates, orionHubCoordinates)) {
+                        // nearby Hub
+                        //Must check other fields
 
-                    if (orionEntity["https://smartdatamodels.org/dataModel.DigitalInnovationHub/website"].value == JRCEntity.website.value) {
-                        //This is the same entity
-                        isNewEntity = false;
-                        try {
+                        if (orionEntity["https://smartdatamodels.org/dataModel.DigitalInnovationHub/website"].value == JRCEntity.website.value) {
+                            //This is the same entity
+                            isNewEntity = false;
+                            try {
 
-                            if (Date.parse(JRCEntity.dateUpdated.value) > Date.parse(orionEntity.dateUpdated.value)) {
-                                // new is more recent. Catch to upadate
-                                log.debug("Entity " + orionEntity.id + " is updating...")
-                                entitiesToUpdate.push(JRCEntity)
+                                if (Date.parse(JRCEntity.dateUpdated.value) > Date.parse(orionEntity.dateUpdated.value)) {
+                                    // new is more recent. Catch to upadate
+                                    log.debug("Entity " + orionEntity.id + " is updating...")
+                                    entitiesToUpdate.push(JRCEntity)
 
+                                }
+                            } catch (e) {
+                                log.error("probema con " + JRCEntity.id)
                             }
-                        } catch (e) {
-                            log.error("probema con " + JRCEntity.id)
                         }
                     }
                 }
