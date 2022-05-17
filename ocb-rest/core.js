@@ -161,7 +161,50 @@ module.exports = {
       log.error("Unable get all entities due to: " + e.message)
       throw e
     }
+  },
+  /*****************NEW FUNCTION ********************/
+  getAllOrionEntities: async function () {
+
+    let options = {
+      headers: {
+        "Content-Type": "application/ld+json",
+      },
+    };
+
+    let limit = process.env.PAGINATION_LIMIT
+    let offset = process.env.PAGINATION_OFFSET
+    let entities = [];
+    let resp;
+    let elemsPresent = true
+
+    try {
+      while(elemsPresent) {
+        console.log("OFFSET: ", offset)
+        console.log("\nURL: ", process.env.PROTOCOL + '://' + process.env.HOST + ':' +  process.env.PORT + '/ngsi-ld/v1/entities?type=' + process.env.ENTITIES_TYPE + "&limit=" + limit + "&offset=" + offset)
+       
+       //let resp = await axios.get(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entities?type=' + process.env.ENTITIES_TYPE + "&limit=" + limit + "&offset=" + offset)
+        resp = await oauthAxios.get(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entities?type=' + process.env.ENTITIES_TYPE + "&limit=" + limit + "&offset=" + offset, options)
+
+        if (resp.status != 200) {
+          console.error(resp.data)
+          throw new Error(resp.status)
+        }
+        entities.push(resp.data)
+        offset = +offset + (+limit)
+        
+        if(resp.data.length == 0) {
+          elemsPresent = false;
+        }
+        //return resp.data
+      } 
+
+    } catch (e) {
+      log.error("Unable get all entities due to: " + e.message)
+      throw e
+    }
+    return entities
   }
+  /**************************************************/
 }
 
 // To reduce loss
@@ -175,7 +218,7 @@ async function reduceLoss(chunk) {
       //await axios.post(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entities', chunk[i], options)
       await oauthAxios.post(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entities', chunk[i], options)
     } else {
-     // resp = await axios.patch(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entities/' + entityID + "/attrs", chunk[i], options)
+      // resp = await axios.patch(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entities/' + entityID + "/attrs", chunk[i], options)
       resp = await oauthAxios.patch(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entities/' + entityID + "/attrs", chunk[i], options)
     }
   }

@@ -34,6 +34,7 @@ async function temporizedJob() {
     let dihArray = []
     let updateOrCreateArray = []
 
+
     try {
         let response = await axios.get(process.env.URL);
 
@@ -46,8 +47,8 @@ async function temporizedJob() {
     log.debug("\n\nReady to send to Orion...\n\n")
 
 
-
-    let orionEntities = await rest.getAllEntities(dihArray.length);
+   //let orionEntities = await rest.getAllEntities(dihArray.length);
+   let orionEntities = await rest.getAllOrionEntities();
 
     updateOrCreateArray = await checkers.duplicateChecker(orionEntities, dihArray)
 
