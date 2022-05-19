@@ -34,10 +34,15 @@ async function temporizedJob() {
     let dihArray = []
     let updateOrCreateArray = []
 
+    let axiosConfig = {
+        maxContentLength: Infinity, 
+        maxBodyLength: Infinity        
+    };
 
     try {
-        let response = await axios.get(process.env.URL);
-
+        console.log("TRY THE AXIOS")
+        let response = await axios.get(process.env.URL, axiosConfig);
+        console.log("END AXIOS")
         dihArray = await adapterJob.getData(response)
 
     } catch (e) {

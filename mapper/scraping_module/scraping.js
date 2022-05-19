@@ -15,8 +15,13 @@ module.exports = {
         let hub
         let count = parseInt(process.env.ATTEMPTS_NUMBER)
 
+        let axiosConfig = {
+            maxContentLength: Infinity, 
+            maxBodyLength: Infinity        
+        };
+
         try {
-            hub = await axios.get(siteURL)
+            hub = await axios.get(siteURL, axiosConfig)
 
         } catch (axiosErr) {
             count = count - 1;

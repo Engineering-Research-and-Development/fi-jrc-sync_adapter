@@ -16,6 +16,8 @@ module.exports = {
       headers: {
         "Content-Type": "application/ld+json",
       },
+      maxContentLength: Infinity, 
+      maxBodyLength: Infinity,
       validateStatus: s => true
     };
     entityToOrion = JSON.parse(ngsiLDPayload)
@@ -47,7 +49,7 @@ module.exports = {
 
     try {
       //let response = await axios.get(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entities?id=' + entityID)
-      let response = await oauthAxios.get(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entities?id=' + entityID)
+      let response = await oauthAxios.get(process.env.PROTOCOL + '://' + process.env.HOST + ':' + process.env.PORT + '/ngsi-ld/v1/entities?id=' + entityID, options)
 
       if (response.data.length != 0) {
         return true
