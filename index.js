@@ -55,6 +55,8 @@ async function temporizedJob() {
    //let orionEntities = await rest.getAllEntities(dihArray.length);
    let orionEntities = await rest.getAllOrionEntities();
 
+   log.warning(orionEntities.length)
+
     updateOrCreateArray = await checkers.duplicateChecker(orionEntities, dihArray)
 
 

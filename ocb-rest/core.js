@@ -191,7 +191,8 @@ module.exports = {
           console.error(resp.data)
           throw new Error(resp.status)
         }
-        entities.push(resp.data)
+        Array.prototype.push.apply(entities, resp.data)
+     //   entities.push(resp.data)
         offset = +offset + (+limit)
         
         if(resp.data.length == 0) {

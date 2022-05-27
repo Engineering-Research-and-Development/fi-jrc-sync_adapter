@@ -34,10 +34,12 @@ class RESTCallsManager {
       return response
     }, async function (error) {
       const originalRequest = error.config;
-      console.log(error)
-      if (error.response.status === 401 && error.response.data.includes('access token has expired') && !originalRequest._retry) {
+      if (error.response.status === 401 && 
+        (error.response.data.includes('access token has expired') || error.response.data.includes('access token is no longer valid')) && 
+        !originalRequest._retry) {       
+        logger.debug('Access token expired');
         originalRequest._retry = true;
-        const access_token = (await AuthTokensManager.refreshAccessToken()).accessToken;            
+        const access_token = (await AuthTokensManager.refreshAccessToken()).accessToken;   
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
         
         logger.debug('New Authorization header obtained after refreshing the access token');
